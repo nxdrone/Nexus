@@ -65,8 +65,12 @@ From repository root:
 
 ```bash
 make validate-nc1
+make manifest-real
+make drift-real
 make drift-sample
 ```
 
 - `validate-nc1` runs JSON/schema/consistency checks against authoritative NC1 contract files.
-- `drift-sample` runs drift comparison against a sample implementation manifest and prints a report without redefining contract authority.
+- `manifest-real` validates a real-format implementation manifest against the drift manifest schema.
+- `drift-real` compares a real-format implementation manifest against the NC1 contract and fails on contract violations.
+- `drift-sample` runs drift comparison against an intentionally drifting sample manifest for dry-run diagnostics without redefining contract authority.

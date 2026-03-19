@@ -59,6 +59,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Validate real-format manifest schema
+        run: |
+          python tools/drift/validate_manifest_against_schema.py \
+            --manifest tools/drift/examples/nc1_real_impl_manifest.json
+
       - name: Compare sample implementation manifest (non-blocking)
         run: |
           python tools/drift/compare_manifest_to_contract.py \

@@ -5,23 +5,12 @@
   "type": "object",
   "properties": {
     "id": { "type": "string" },
-    "profile": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "version": { "type": "string" }
-      },
-      "required": ["id", "version"]
-    },
-    "implementation": {
-      "type": "object",
-      "properties": {
-        "name": { "type": "string" },
-        "type": { "type": "string" },
-        "source": { "type": "string" }
-      },
-      "required": ["name", "type"]
-    },
+    "schema_version": { "type": "string" },
+    "manifest_version": { "type": "string" },
+    "declared_profile_id": { "type": "string" },
+    "declared_profile_version": { "type": "string" },
+    "declared_contract_version": { "type": "string" },
+    "implementation_manifest_version": { "type": "string" },
     "capabilities": {
       "type": "array",
       "items": {
@@ -29,10 +18,63 @@
         "properties": {
           "id": { "type": "string" },
           "supported": { "type": "boolean" },
-          "stability_class": { "type": "string" }
+          "stability_class": { "type": "string" },
+          "status": { "type": "string" }
         },
         "required": ["id", "supported"]
       }
+    },
+    "config_model": {
+      "type": "object",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "mutability": { "type": "string" }
+            },
+            "required": ["id"]
+          }
+        }
+      },
+      "required": ["groups"]
+    },
+    "commissioning_model": {
+      "type": "object",
+      "properties": {
+        "states": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "required": { "type": "boolean" }
+            },
+            "required": ["id"]
+          }
+        }
+      },
+      "required": ["states", "stages"]
+    },
+    "state_model": {
+      "type": "object",
+      "properties": {
+        "states": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "modifiers": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["states"]
     },
     "commands": {
       "type": "array",
@@ -45,10 +87,57 @@
         "required": ["token"]
       }
     },
+    "command_completion": {
+      "type": "object"
+    },
+    "exposure": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "object",
+          "properties": {
+            "contract_source": { "type": "string" },
+            "firmware_role": { "type": "string" }
+          },
+          "required": ["contract_source", "firmware_role"]
+        }
+      },
+      "required": ["authority"]
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
     "config_groups": {
       "type": "array",
       "items": { "type": "string" }
     }
   },
-  "required": ["id", "profile", "implementation", "capabilities", "commands"]
+  "required": [
+    "id",
+    "schema_version",
+    "manifest_version",
+    "declared_profile_id",
+    "declared_profile_version",
+    "declared_contract_version",
+    "implementation_manifest_version",
+    "capabilities",
+    "config_model",
+    "commissioning_model",
+    "state_model",
+    "commands",
+    "command_completion",
+    "exposure"
+  ]
 }
