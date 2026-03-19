@@ -1,0 +1,112 @@
+{
+  "id": "nc1-state-machine",
+  "display_name": "NC1 State and Safety Model",
+  "version": "0.2.0",
+  "status": "provisional",
+  "contract_schema_version": "1.0.0",
+  "description": "Client-visible state model for NC1, including safety and test-mode semantics.",
+  "states": [
+    {
+      "id": "safe",
+      "display_name": "Safe",
+      "meaning": "System is not actively armed for motion/action and accepts setup/config operations.",
+      "client_visible_semantics": "Default target state after commissioning commit or controlled stop."
+    },
+    {
+      "id": "armed",
+      "display_name": "Armed",
+      "meaning": "System is enabled for operational commands under configured safeguards.",
+      "client_visible_semantics": "Operational commands may be accepted subject to runtime checks."
+    },
+    {
+      "id": "test_mode",
+      "display_name": "Test Mode",
+      "meaning": "System is in explicit testing context with restricted command surface.",
+      "client_visible_semantics": "Only allowed test and safety commands should be issued."
+    },
+    {
+      "id": "failsafe",
+      "display_name": "Failsafe",
+      "meaning": "System detected safety-critical condition and enforced protective behavior.",
+      "client_visible_semantics": "Clients should stop issuing non-recovery commands and surface blockers."
+    },
+    {
+      "id": "signal_loss",
+      "display_name": "Signal Loss",
+      "meaning": "Required control/communication signal degraded below policy threshold.",
+      "client_visible_semantics": "State may transition to failsafe or safe based on policy."
+    }
+  ],
+  "modifiers": [
+    {
+      "id": "stop_latched",
+      "display_name": "Stop Latched",
+      "description": "Indicates stop condition remains active until explicit reset/ack policy is satisfied."
+    },
+    {
+      "id": "commissioning_active",
+      "display_name": "Commissioning Active",
+      "description": "Indicates commissioning workflow currently constrains command/state transitions."
+    }
+  ],
+  "command_driven_transitions": [
+    {
+      "command": "safety.stop_all",
+      "from": [
+        "armed",
+        "test_mode",
+        "safe"
+      ],
+      "to": "safe",
+      "notes": "Runtime may enter failsafe instead if stop execution encounters safety fault."
+    },
+    {
+      "command": "state.enter_test_mode",
+      "from": [
+        "safe"
+      ],
+      "to": "test_mode",
+      "notes": "Requires extension capability support and no active failsafe blockers."
+    },
+    {
+      "command": "state.exit_test_mode",
+      "from": [
+        "test_mode"
+      ],
+      "to": "safe",
+      "notes": "May require additional safety acknowledgement in some implementations."
+    }
+  ],
+  "runtime_driven_transitions": [
+    {
+      "trigger": "safety_fault_detected",
+      "from": [
+        "safe",
+        "armed",
+        "test_mode",
+        "signal_loss"
+      ],
+      "to": "failsafe"
+    },
+    {
+      "trigger": "signal_quality_below_threshold",
+      "from": [
+        "armed",
+        "test_mode"
+      ],
+      "to": "signal_loss"
+    },
+    {
+      "trigger": "signal_restored_and_policy_allows",
+      "from": [
+        "signal_loss"
+      ],
+      "to": "safe"
+    }
+  ],
+  "assumption_limits": [
+    "State transition acceptance is subject to runtime policy and safety evaluation.",
+    "Clients must not assume deterministic transition latency.",
+    "Implementations may expose additional internal substates that map to these public states."
+  ]
+}
