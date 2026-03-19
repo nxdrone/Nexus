@@ -46,6 +46,14 @@ Key principles:
 2. Implementation behavior does not automatically become contract.
 3. Validation and compliance compare implementations to Nexus; they do not redefine Nexus from observed quirks.
 
+
+## Governance policies
+
+- [Source-of-Truth Policy](docs/governance/source-of-truth-policy.md)
+- [Change Management Policy](docs/governance/change_management.md)
+- [Compliance Policy](docs/governance/compliance-policy.md)
+- [Versioning Policy](docs/governance/versioning-policy.md)
+
 ## Long-term purpose
 
 Over time, this repository should become the stable coordination layer across Nexus ecosystem components by:

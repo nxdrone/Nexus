@@ -14,3 +14,6 @@ Nexus is the authoritative source of truth for ecosystem contracts.
 ## Enforcement intent
 
 Validation/compliance/drift workflows compare implementations and consumers against Nexus artifacts, not the reverse.
+
+See [Change Management Policy](change_management.md) for the required sequencing of contract definition, implementation declaration, and consumer adoption.
+

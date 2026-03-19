@@ -14,3 +14,8 @@ Compliance is evaluated against Nexus contract definitions.
 ## TODO
 
 Define profile-specific compliance levels, scoring/report format, and waiver/exception process.
+
+## Cross-reference
+
+Compliance execution and release gating must follow the workflow defined in the [Change Management Policy](change_management.md).
+
