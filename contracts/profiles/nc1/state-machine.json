@@ -1,0 +1,13 @@
+{
+  "id": "nc1-state-machine",
+  "schema_version": "1.0.0",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "Placeholder state-machine declaration for NC1.",
+  "states": [],
+  "transitions": [],
+  "todo": [
+    "Define normative states and terminal states.",
+    "Define transition guards and failure transitions."
+  ]
+}

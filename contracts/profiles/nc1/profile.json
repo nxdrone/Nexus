@@ -1,0 +1,36 @@
+{
+  "id": "nc1",
+  "schema_version": "1.0.0",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "NC1 ecosystem profile contract package.",
+  "scope": {
+    "inclusions": [
+      "capabilities",
+      "commands",
+      "configuration",
+      "commissioning",
+      "state_machine",
+      "test_catalog",
+      "compatibility"
+    ],
+    "exclusions": [
+      "transport implementation specifics",
+      "firmware runtime internals",
+      "ui-specific behavior"
+    ]
+  },
+  "artifacts": {
+    "capabilities": "capabilities.json",
+    "commands": "commands.json",
+    "config_schema": "config.schema.json",
+    "commissioning_schema": "commissioning.schema.json",
+    "state_machine": "state-machine.json",
+    "test_schema": "test.schema.json",
+    "compatibility": "compatibility.json"
+  },
+  "todo": [
+    "Define normative profile boundaries and mandatory subsets.",
+    "Add release channel metadata and support windows."
+  ]
+}

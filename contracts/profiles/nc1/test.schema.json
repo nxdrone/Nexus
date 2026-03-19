@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/contracts/profiles/nc1/test.schema.json",
+  "title": "NC1 Test Catalog Schema",
+  "description": "Placeholder schema for NC1 compliance test catalog metadata.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "schema_version": { "type": "string" },
+    "version": { "type": "string" },
+    "status": { "type": "string" },
+    "tests": {
+      "type": "array",
+      "items": { "$ref": "../../../schemas/test-catalog.schema.json" }
+    },
+    "todo": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["id", "schema_version", "version", "status", "tests"]
+}

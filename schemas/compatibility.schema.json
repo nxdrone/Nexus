@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/compatibility.schema.json",
+  "title": "Compatibility Rule",
+  "type": "object",
+  "properties": {
+    "producer": { "type": "string" },
+    "consumer": { "type": "string" },
+    "constraint": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "required": ["producer", "consumer", "constraint"]
+}

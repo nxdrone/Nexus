@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/profile.schema.json",
+  "title": "Profile",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": "string" },
+    "schema_version": { "type": "string" },
+    "status": { "type": "string" },
+    "description": { "type": "string" }
+  },
+  "required": ["id", "version", "schema_version", "status"]
+}

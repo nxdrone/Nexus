@@ -1,0 +1,22 @@
+{
+  "id": "nc1-capabilities",
+  "schema_version": "1.0.0",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "Capability catalog for the NC1 profile.",
+  "categories": [
+    {
+      "id": "motion",
+      "description": "TODO: Define motion-related capability group."
+    },
+    {
+      "id": "safety",
+      "description": "TODO: Define safety and interlock capability group."
+    }
+  ],
+  "capabilities": [],
+  "todo": [
+    "Add required/optional capability declarations.",
+    "Define lifecycle and deprecation policy per capability."
+  ]
+}

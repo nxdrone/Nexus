@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/command.schema.json",
+  "title": "Command",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "stability": { "type": "string" },
+    "description": { "type": "string" }
+  },
+  "required": ["id", "name"]
+}

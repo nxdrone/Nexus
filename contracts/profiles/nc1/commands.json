@@ -1,0 +1,18 @@
+{
+  "id": "nc1-commands",
+  "schema_version": "1.0.0",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "Command catalog for the NC1 profile.",
+  "stability_tiers": [
+    "experimental",
+    "beta",
+    "stable",
+    "deprecated"
+  ],
+  "commands": [],
+  "todo": [
+    "Define command namespaces and naming conventions.",
+    "Add request/response shape references and error semantics."
+  ]
+}

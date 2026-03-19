@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/capability.schema.json",
+  "title": "Capability",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "category": { "type": "string" },
+    "description": { "type": "string" },
+    "required": { "type": "boolean" }
+  },
+  "required": ["id", "category"]
+}
