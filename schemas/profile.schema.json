@@ -5,10 +5,18 @@
   "type": "object",
   "properties": {
     "id": { "type": "string" },
+    "display_name": { "type": "string" },
     "version": { "type": "string" },
-    "schema_version": { "type": "string" },
     "status": { "type": "string" },
+    "contract_schema_version": { "type": "string" },
     "description": { "type": "string" }
   },
-  "required": ["id", "version", "schema_version", "status"]
+  "required": [
+    "id",
+    "display_name",
+    "version",
+    "status",
+    "contract_schema_version",
+    "description"
+  ]
 }

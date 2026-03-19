@@ -10,7 +10,7 @@ This area is reserved for contract validation utilities.
 
 ## Boundary
 
-These tools validate declared contract artifacts in `nexus`.
+These tools validate declared contract artifacts in Nexus.
 They do **not** redefine authoritative contract behavior from implementation output.
 
 ## TODO

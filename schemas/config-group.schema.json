@@ -5,11 +5,23 @@
   "type": "object",
   "properties": {
     "id": { "type": "string" },
-    "description": { "type": "string" },
-    "fields": {
-      "type": "array",
-      "items": { "type": "object" }
-    }
+    "display_name": { "type": "string" },
+    "purpose": { "type": "string" },
+    "mutability": { "type": "string" },
+    "requirement": {
+      "type": "string",
+      "enum": ["required", "optional"]
+    },
+    "example_fields": { "type": "object" },
+    "client_notes": { "type": "string" }
   },
-  "required": ["id", "fields"]
+  "required": [
+    "id",
+    "display_name",
+    "purpose",
+    "mutability",
+    "requirement",
+    "example_fields",
+    "client_notes"
+  ]
 }

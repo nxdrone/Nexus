@@ -1,13 +1,23 @@
 # NC1 Profile Overview
 
-`nc1` is the first ecosystem profile package scaffolded in `nexus`.
+NC1 is the first concrete profile package in Nexus and defines the canonical client-facing interoperability contract for NC1-class implementations.
 
-## Ownership model
+## What NC1 governs
 
-- `nexus` owns the client-facing contract surface for `nc1`.
-- NexCore firmware repositories implement the `nc1` contract.
-- NexSight and related tooling consume `nc1` declarations.
+The NC1 package governs:
+- profile identity and compatibility declarations
+- capability declarations and support semantics
+- command catalog tokens, stability classes, and behavior expectations
+- configuration and commissioning contract structures
+- state/safety semantics exposed to clients
+- test/service discovery contract shape
 
-## Current state
+## Producer/consumer relationship
 
-Initial contract scaffolding and migration are in progress.
+- **NexCore** implementations publish and execute NC1 contract surfaces.
+- **NexSight** and other clients consume NC1 contract declarations to drive UX and automation behavior.
+- **NexBus** carries data and command traffic, while NC1 in Nexus defines the interop contract those payloads represent.
+
+## Boundary reminder
+
+NC1 in Nexus defines contract intent and client-visible semantics; it does not define firmware internals, transport implementation specifics, or product-specific UX flows.

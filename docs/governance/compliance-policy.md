@@ -2,11 +2,11 @@
 
 ## Policy statement
 
-Compliance is evaluated against `nexus` contract definitions.
+Compliance is evaluated against Nexus contract definitions.
 
 ## Required rules
 
-- Implementations are compliant only when behavior aligns with declared contract artifacts in `nexus`.
+- Implementations are compliant only when behavior aligns with declared contract artifacts in Nexus.
 - Consumer assumptions must align with declared compatibility and lifecycle status.
 - Experimental or undocumented behavior cannot be treated as compliant contract surface.
 - Compliance tooling validates and reports; it does not mutate authoritative contract artifacts.

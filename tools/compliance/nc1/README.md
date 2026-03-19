@@ -10,7 +10,7 @@ This area is reserved for NC1-specific compliance harnesses and fixtures.
 
 ## Boundary
 
-Compliance tooling compares implementation behavior against `nexus` contract declarations.
+Compliance tooling compares implementation behavior against Nexus contract declarations.
 It does **not** promote observed implementation quirks into official contract.
 
 ## TODO

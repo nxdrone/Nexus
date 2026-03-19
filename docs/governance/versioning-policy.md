@@ -18,4 +18,4 @@ Contract elements should include lifecycle markers (e.g., draft, experimental, s
 
 ## TODO
 
-Define exact versioning mechanics per artifact class and release process for `nc1` and future profiles.
+Define exact versioning mechanics per artifact class and release process for NC1 and future profiles.
