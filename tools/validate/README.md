@@ -1,18 +1,38 @@
 # Contract Validation Tooling
 
-This area is reserved for contract validation utilities.
+This directory contains validation tooling for Nexus contract artifacts.
 
-## Intended role
+## Authority model
 
-- Validate syntax and structural correctness of contract artifacts.
-- Validate contract files against shared/profile schemas.
-- Provide actionable diagnostics for contract authors.
+Nexus contract files are authoritative.
+These tools validate declared contract artifacts and report issues.
+They **do not** infer, rewrite, or promote implementation behavior into authoritative contract.
 
-## Boundary
+## What exists in phase 3
 
-These tools validate declared contract artifacts in Nexus.
-They do **not** redefine authoritative contract behavior from implementation output.
+- `contracts/validate_contracts.py`
+  - loads NC1 contract files
+  - checks JSON integrity
+  - validates contract structures against shared schemas where applicable
+  - runs internal consistency checks across NC1 files
+  - emits errors and warnings with file/path context
+- `contracts/consistency_checks.py`
+  - cross-file checks for references, duplicates, stability vocabulary, and key invariants
+- `shared/`
+  - reusable loaders, schema helpers, and reporting model
 
-## TODO
+## Local usage
 
-Add validator CLI entrypoint and schema-driven validation workflow.
+From repository root:
+
+```bash
+python tools/validate/contracts/validate_contracts.py
+```
+
+Expected behavior:
+- exit code `0` on success or warnings only
+- exit code `1` if validation/consistency errors exist
+
+## Extension notes
+
+The validator is currently NC1-first, but is structured so additional profile bundles can be added with new file maps and profile-aware checks.

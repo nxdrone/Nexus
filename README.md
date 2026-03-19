@@ -57,3 +57,16 @@ Over time, this repository should become the stable coordination layer across Ne
 ## Current state
 
 NC1 now includes a first-pass, structured contract package intended for implementation alignment in NexCore and consumption alignment in NexSight, with provisional areas explicitly marked for ratification in later phases.
+
+
+## Tooling quickstart
+
+From repository root:
+
+```bash
+make validate-nc1
+make drift-sample
+```
+
+- `validate-nc1` runs JSON/schema/consistency checks against authoritative NC1 contract files.
+- `drift-sample` runs drift comparison against a sample implementation manifest and prints a report without redefining contract authority.
