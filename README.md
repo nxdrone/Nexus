@@ -1,6 +1,6 @@
-# nexus
+# Nexus
 
-`nexus` is the canonical ecosystem contract and compliance layer for the Nexus robotics platform.
+Nexus is the canonical ecosystem contract and compliance layer for the Nexus robotics platform.
 
 It is the authoritative source of truth for:
 - ecosystem profile contracts
@@ -15,7 +15,7 @@ It is the authoritative source of truth for:
 This repository owns **contract definitions** and **governance** for cross-repo interoperability.
 
 Examples of in-scope content:
-- profile packages (starting with `nc1`)
+- profile packages (starting with NC1)
 - shared schemas and profile schemas
 - policy and lifecycle documentation
 - validation/compliance/drift tooling
@@ -28,23 +28,23 @@ This repository is **not**:
 - a protocol transport implementation repository
 - a product UI/client implementation repository
 
-Concretely, this repo does not contain runtime control logic from NexCore firmware, transport mechanics from Nexbus, or product features from NexSight.
+Concretely, this repo does not contain runtime control logic from NexCore firmware, transport mechanics from NexBus, or product features from NexSight.
 
 ## Relationship to surrounding repositories
 
-- **Nexbus**: implements protocol and transport behavior that carries contract data.
-- **NexCore_\***: firmware repositories that implement profile contracts on devices/controllers.
+- **NexBus**: implements protocol and transport behavior that carries contract data.
+- **NexCore**: firmware repositories that implement profile contracts on devices/controllers.
 - **NexSight**: client/tooling ecosystem that discovers, configures, commands, and validates against declared contracts.
-- **nexus** (this repo): defines the contract those repos implement or consume.
+- **Nexus** (this repo): defines the contract those repos implement or consume.
 
 ## Contract-first philosophy
 
-Contract-first means the canonical client-facing behavior must be declared in `nexus` before it is treated as stable ecosystem surface.
+Contract-first means the canonical client-facing behavior must be declared in Nexus before it is treated as stable ecosystem surface.
 
 Key principles:
 1. If consumers depend on it, it must be defined here.
 2. Implementation behavior does not automatically become contract.
-3. Validation and compliance compare implementations to `nexus`; they do not redefine `nexus` from observed quirks.
+3. Validation and compliance compare implementations to Nexus; they do not redefine Nexus from observed quirks.
 
 ## Long-term purpose
 
@@ -56,4 +56,17 @@ Over time, this repository should become the stable coordination layer across Ne
 
 ## Current state
 
-Initial scaffolding is in place for the first profile package, `nc1`, with placeholder contract files, schema baselines, governance docs, tooling stubs, and examples ready for iterative definition.
+NC1 now includes a first-pass, structured contract package intended for implementation alignment in NexCore and consumption alignment in NexSight, with provisional areas explicitly marked for ratification in later phases.
+
+
+## Tooling quickstart
+
+From repository root:
+
+```bash
+make validate-nc1
+make drift-sample
+```
+
+- `validate-nc1` runs JSON/schema/consistency checks against authoritative NC1 contract files.
+- `drift-sample` runs drift comparison against a sample implementation manifest and prints a report without redefining contract authority.

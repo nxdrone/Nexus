@@ -1,0 +1,81 @@
+{
+  "id": "sample-nc1-impl-manifest",
+  "profile": {
+    "id": "nc1",
+    "version": "0.2.0"
+  },
+  "implementation": {
+    "name": "Sample NexCore Adapter",
+    "type": "firmware_controller",
+    "source": "manual-example"
+  },
+  "capabilities": [
+    {
+      "id": "discovery.profile_descriptor",
+      "supported": true,
+      "stability_class": "required"
+    },
+    {
+      "id": "configuration.group_read_write",
+      "supported": true,
+      "stability_class": "required"
+    },
+    {
+      "id": "commissioning.guided_workflow",
+      "supported": true,
+      "stability_class": "required"
+    },
+    {
+      "id": "safety.stop_all",
+      "supported": true,
+      "stability_class": "required"
+    },
+    {
+      "id": "testing.catalog_discovery",
+      "supported": false,
+      "stability_class": "required"
+    },
+    {
+      "id": "vendor.custom_capability",
+      "supported": true,
+      "stability_class": "extension"
+    }
+  ],
+  "commands": [
+    {
+      "token": "system.get_profile",
+      "stability_class": "required"
+    },
+    {
+      "token": "config.get_groups",
+      "stability_class": "required"
+    },
+    {
+      "token": "config.update_groups",
+      "stability_class": "required"
+    },
+    {
+      "token": "commissioning.get_status",
+      "stability_class": "required"
+    },
+    {
+      "token": "commissioning.commit",
+      "stability_class": "required"
+    },
+    {
+      "token": "test.list_catalog",
+      "stability_class": "optional"
+    },
+    {
+      "token": "vendor.custom_command",
+      "stability_class": "extension"
+    }
+  ],
+  "config_groups": [
+    "identity",
+    "classification",
+    "hardware",
+    "operational",
+    "vendor_group"
+  ]
+}

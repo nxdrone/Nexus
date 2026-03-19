@@ -1,0 +1,24 @@
+{
+  "id": "nc1-state-model-expectations",
+  "display_name": "NC1 State and Safety Expectations",
+  "version": "0.1.0",
+  "status": "provisional",
+  "profile_id": "nc1",
+  "required_states": [
+    "safe",
+    "armed",
+    "failsafe",
+    "signal_loss"
+  ],
+  "conditional_states": [
+    {
+      "id": "test_mode",
+      "condition": "required only when state_control.test_mode capability is supported=true"
+    }
+  ],
+  "required_semantics": [
+    "safety.stop_all drives transition intent toward safe or failsafe depending on runtime safety evaluation",
+    "signal_loss behavior is client-visible and may cascade into failsafe",
+    "clients must not assume deterministic transition timing"
+  ]
+}

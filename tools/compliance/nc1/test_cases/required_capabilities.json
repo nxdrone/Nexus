@@ -1,0 +1,15 @@
+{
+  "id": "nc1-required-capabilities",
+  "display_name": "NC1 Required Capabilities",
+  "version": "0.1.0",
+  "status": "provisional",
+  "profile_id": "nc1",
+  "required_capabilities": [
+    "discovery.profile_descriptor",
+    "configuration.group_read_write",
+    "commissioning.guided_workflow",
+    "safety.stop_all",
+    "testing.catalog_discovery"
+  ],
+  "expectation": "Implementations declare each required capability with supported=true."
+}

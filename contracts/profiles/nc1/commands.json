@@ -1,18 +1,234 @@
 {
   "id": "nc1-commands",
-  "schema_version": "1.0.0",
-  "version": "0.1.0",
-  "status": "draft",
-  "description": "Command catalog for the NC1 profile.",
-  "stability_tiers": [
-    "experimental",
-    "beta",
-    "stable",
-    "deprecated"
+  "display_name": "NC1 Command Catalog",
+  "version": "0.2.0",
+  "status": "provisional",
+  "contract_schema_version": "1.0.0",
+  "description": "Structured command catalog for NC1 client-facing interop.",
+  "stability_classes": [
+    "required",
+    "optional",
+    "extension",
+    "experimental"
   ],
-  "commands": [],
-  "todo": [
-    "Define command namespaces and naming conventions.",
-    "Add request/response shape references and error semantics."
+  "commands": [
+    {
+      "token": "system.get_profile",
+      "display_name": "Get Profile Descriptor",
+      "stability_class": "required",
+      "category": "system",
+      "purpose": "Return profile identity, version, and contract references.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/system_get_profile_request",
+      "preconditions": [
+        "Transport session established."
+      ],
+      "response_contract": "Returns profile id/version and supported capability declarations.",
+      "completion_model": "immediate",
+      "follow_up_messages": [],
+      "error_behavior": "Returns standardized error response if descriptor unavailable.",
+      "notes": "Baseline entry-point command for NC1-aware consumers."
+    },
+    {
+      "token": "config.get_groups",
+      "display_name": "Get Config Groups",
+      "stability_class": "required",
+      "category": "config",
+      "purpose": "Read declared configuration and discovery groups with mutability metadata.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/config_get_groups_request",
+      "preconditions": [
+        "Device reachable.",
+        "Requester authorized for read scope."
+      ],
+      "response_contract": "Returns grouped config payload including read_only and writable fields.",
+      "completion_model": "immediate",
+      "follow_up_messages": [],
+      "error_behavior": "Returns authorization or unsupported-group errors as applicable.",
+      "notes": "Clients must not infer writability outside explicit metadata."
+    },
+    {
+      "token": "config.update_groups",
+      "display_name": "Update Config Groups",
+      "stability_class": "required",
+      "category": "config",
+      "purpose": "Apply updates to writable operational or commissioning config groups.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/config_update_groups_request",
+      "preconditions": [
+        "Requester authorized for write scope.",
+        "Target groups are writable in current state."
+      ],
+      "response_contract": "Returns accepted/rejected fields and validation issues.",
+      "completion_model": "staged",
+      "follow_up_messages": [
+        "commissioning.status_changed"
+      ],
+      "error_behavior": "Validation errors are field-scoped and non-fatal to unrelated fields.",
+      "notes": "Commit behavior depends on commissioning mode and stage policy."
+    },
+    {
+      "token": "commissioning.get_status",
+      "display_name": "Get Commissioning Status",
+      "stability_class": "required",
+      "category": "commissioning",
+      "purpose": "Return current commissioning state, stage, blockers, and next actions.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/commissioning_get_status_request",
+      "preconditions": [
+        "Transport session established."
+      ],
+      "response_contract": "Returns commissioning state model including editable groups and blocking validations.",
+      "completion_model": "immediate",
+      "follow_up_messages": [],
+      "error_behavior": "Returns unavailable error if commissioning capability is not supported.",
+      "notes": "Authoritative source for rendering commissioning progress in NexSight."
+    },
+    {
+      "token": "commissioning.apply_stage",
+      "display_name": "Apply Commissioning Stage",
+      "stability_class": "required",
+      "category": "commissioning",
+      "purpose": "Attempt stage transition after validating required data for current stage.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/commissioning_apply_stage_request",
+      "preconditions": [
+        "Current stage allows apply action.",
+        "Required fields for stage have candidate values."
+      ],
+      "response_contract": "Returns accepted stage transition or blocking validation reasons.",
+      "completion_model": "synchronous-with-validation",
+      "follow_up_messages": [
+        "commissioning.status_changed"
+      ],
+      "error_behavior": "Stage transition denial includes machine-readable blocker codes.",
+      "notes": "Does not imply final commit unless target stage policy says auto-commit."
+    },
+    {
+      "token": "commissioning.commit",
+      "display_name": "Commit Commissioning",
+      "stability_class": "required",
+      "category": "commissioning",
+      "purpose": "Commit staged commissioning/configuration values and release runtime.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/commissioning_commit_request",
+      "preconditions": [
+        "Commissioning state is ready_to_commit.",
+        "All required validation checks pass."
+      ],
+      "response_contract": "Returns commit result, applied revision, and refresh requirements.",
+      "completion_model": "asynchronous",
+      "follow_up_messages": [
+        "system.profile_refreshed",
+        "state.changed"
+      ],
+      "error_behavior": "Commit failure includes rollback status and required corrective actions.",
+      "notes": "Clients should perform authoritative refresh after successful commit."
+    },
+    {
+      "token": "test.list_catalog",
+      "display_name": "List Test Catalog",
+      "stability_class": "required",
+      "category": "testing",
+      "purpose": "Return test inventory with hazard/gating metadata for UI rendering.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/test_list_catalog_request",
+      "preconditions": [
+        "Requester authorized for test discovery scope."
+      ],
+      "response_contract": "Returns machine-readable test entries and availability states.",
+      "completion_model": "immediate",
+      "follow_up_messages": [],
+      "error_behavior": "Returns authorization or feature-disabled errors when applicable.",
+      "notes": "Preferred source for NexSight test listing; avoid hardcoded catalogs."
+    },
+    {
+      "token": "test.run_component",
+      "display_name": "Run Component Test",
+      "stability_class": "optional",
+      "category": "component_tests",
+      "purpose": "Run a named component test instance from the declared test catalog.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/test_run_component_request",
+      "preconditions": [
+        "Requested test is listed and currently available.",
+        "Session meets declared gating requirements."
+      ],
+      "response_contract": "Returns accepted run id with progress and completion summary channels.",
+      "completion_model": "asynchronous",
+      "follow_up_messages": [
+        "test.progress",
+        "test.completed"
+      ],
+      "error_behavior": "Blocked reasons are returned with gating codes.",
+      "notes": "Optional to allow constrained implementations without active test execution APIs."
+    },
+    {
+      "token": "safety.stop_all",
+      "display_name": "Stop All",
+      "stability_class": "required",
+      "category": "stop_recovery",
+      "purpose": "Request immediate stop behavior across commandable subsystems.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/safety_stop_all_request",
+      "preconditions": [
+        "Transport session established."
+      ],
+      "response_contract": "Returns stop acceptance and resulting safety/state indicators.",
+      "completion_model": "immediate",
+      "follow_up_messages": [
+        "state.changed"
+      ],
+      "error_behavior": "If stop cannot be applied, response includes highest-severity blocker code.",
+      "notes": "Consumers may treat this as always available in NC1.",
+      "safety_critical": true
+    },
+    {
+      "token": "state.enter_test_mode",
+      "display_name": "Enter Test Mode",
+      "stability_class": "extension",
+      "category": "test_mode",
+      "purpose": "Request transition into test mode when implementation supports controlled test mode.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/state_enter_test_mode_request",
+      "preconditions": [
+        "Capability state_control.test_mode is supported=true.",
+        "No active failsafe or stop blocker."
+      ],
+      "response_contract": "Returns requested transition outcome and constraints.",
+      "completion_model": "synchronous-with-runtime-gate",
+      "follow_up_messages": [
+        "state.changed"
+      ],
+      "error_behavior": "Unsupported or blocked responses include explicit reason codes.",
+      "notes": "Do not hard-require for baseline NC1 compatibility."
+    },
+    {
+      "token": "state.exit_test_mode",
+      "display_name": "Exit Test Mode",
+      "stability_class": "extension",
+      "category": "test_mode",
+      "purpose": "Request return to non-test operating state when test mode is active.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/state_exit_test_mode_request",
+      "preconditions": [
+        "Capability state_control.test_mode is supported=true.",
+        "Current state is test_mode."
+      ],
+      "response_contract": "Returns transition result and any required safety acknowledgements.",
+      "completion_model": "synchronous-with-runtime-gate",
+      "follow_up_messages": [
+        "state.changed"
+      ],
+      "error_behavior": "Rejected transitions include machine-readable blockers.",
+      "notes": "Extension command surface for advanced implementations."
+    },
+    {
+      "token": "system.stream_logs",
+      "display_name": "Stream Logs",
+      "stability_class": "experimental",
+      "category": "logging",
+      "purpose": "Open a best-effort remote diagnostic log stream.",
+      "request_schema_ref": "../../../schemas/command.schema.json#/$defs/system_stream_logs_request",
+      "preconditions": [
+        "Capability logging.remote_log_stream is supported=true."
+      ],
+      "response_contract": "Returns stream endpoint metadata when available.",
+      "completion_model": "session-bound",
+      "follow_up_messages": [
+        "log.entry"
+      ],
+      "error_behavior": "Availability and retention behavior are implementation-defined.",
+      "notes": "Experimental; consumers must feature-detect and degrade gracefully."
+    }
   ]
 }
