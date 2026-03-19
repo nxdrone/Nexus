@@ -1,0 +1,44 @@
+{
+  "id": "nc1-required-commands",
+  "display_name": "NC1 Required Command Expectations",
+  "version": "0.1.0",
+  "status": "provisional",
+  "profile_id": "nc1",
+  "commands": [
+    {
+      "token": "system.get_profile",
+      "must_support": true,
+      "required_behavior": "returns profile id/version and contract metadata"
+    },
+    {
+      "token": "config.get_groups",
+      "must_support": true,
+      "required_behavior": "returns group mutability metadata and values"
+    },
+    {
+      "token": "config.update_groups",
+      "must_support": true,
+      "required_behavior": "returns field-scoped validation and acceptance/rejection details"
+    },
+    {
+      "token": "commissioning.get_status",
+      "must_support": true,
+      "required_behavior": "returns current stage and blockers"
+    },
+    {
+      "token": "commissioning.commit",
+      "must_support": true,
+      "required_behavior": "returns commit result and authoritative refresh requirement"
+    },
+    {
+      "token": "test.list_catalog",
+      "must_support": true,
+      "required_behavior": "returns test metadata including hazard and gating fields"
+    },
+    {
+      "token": "safety.stop_all",
+      "must_support": true,
+      "required_behavior": "initiates stop intent and emits resulting state semantics"
+    }
+  ]
+}

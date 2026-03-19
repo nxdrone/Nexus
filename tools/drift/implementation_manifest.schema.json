@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/tools/drift/implementation_manifest.schema.json",
+  "title": "NC1 Implementation Surface Manifest",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "version": { "type": "string" }
+      },
+      "required": ["id", "version"]
+    },
+    "implementation": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "source": { "type": "string" }
+      },
+      "required": ["name", "type"]
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "supported": { "type": "boolean" },
+          "stability_class": { "type": "string" }
+        },
+        "required": ["id", "supported"]
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" },
+          "stability_class": { "type": "string" }
+        },
+        "required": ["token"]
+      }
+    },
+    "config_groups": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["id", "profile", "implementation", "capabilities", "commands"]
+}
