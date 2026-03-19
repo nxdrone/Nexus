@@ -1,0 +1,66 @@
+{
+  "id": "nc1-test-discovery",
+  "display_name": "NC1 Test Discovery and Execution Contract",
+  "version": "0.2.0",
+  "status": "provisional",
+  "contract_schema_version": "1.0.0",
+  "description": "Machine-readable test/service discovery contract for NC1 consumers.",
+  "catalog_entry_model": {
+    "required_fields": [
+      "test_id",
+      "display_name",
+      "category",
+      "hazard_class",
+      "availability",
+      "supports_stop_all",
+      "session_gate"
+    ],
+    "optional_fields": [
+      "estimated_duration_s",
+      "required_capabilities",
+      "blocked_reasons",
+      "result_schema_hint"
+    ],
+    "rendering_notes": "Clients should render category, hazard class, gate status, and blocked reasons before run actions."
+  },
+  "hazard_classes": [
+    "low",
+    "moderate",
+    "high",
+    "critical"
+  ],
+  "availability_model": {
+    "states": [
+      "available",
+      "blocked",
+      "disabled",
+      "unsupported"
+    ],
+    "blocked_reason_codes": [
+      "state_not_allowed",
+      "safety_latch_active",
+      "capability_missing",
+      "session_missing",
+      "authorization_denied"
+    ]
+  },
+  "gating_model": {
+    "weapon_gate_supported": false,
+    "session_gate": {
+      "required_for": [
+        "moderate",
+        "high",
+        "critical"
+      ],
+      "session_fields": [
+        "session_id",
+        "operator_id",
+        "expires_at"
+      ]
+    }
+  },
+  "stop_all_expectations": {
+    "required": true,
+    "behavior": "All running test executions must honor safety.stop_all and report interrupted outcome."
+  }
+}

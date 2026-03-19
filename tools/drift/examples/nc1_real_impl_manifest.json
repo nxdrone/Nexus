@@ -1,0 +1,65 @@
+{
+  "id": "nexcore-nc1-snapshot-2026-03-19",
+  "schema_version": "1.0.0",
+  "manifest_version": "1.0.0",
+  "declared_profile_id": "nc1",
+  "declared_profile_version": "0.2.0",
+  "declared_contract_version": "0.2.0",
+  "implementation_manifest_version": "2026.03.19",
+  "capabilities": [
+    { "id": "discovery.profile_descriptor", "supported": true, "stability_class": "required" },
+    { "id": "configuration.group_read_write", "supported": true, "stability_class": "required" },
+    { "id": "commissioning.guided_workflow", "supported": true, "stability_class": "required" },
+    { "id": "safety.stop_all", "supported": true, "stability_class": "required" },
+    { "id": "testing.catalog_discovery", "supported": true, "stability_class": "required" },
+    { "id": "state_control.test_mode", "supported": true, "stability_class": "optional" },
+    { "id": "telemetry.stream_runtime", "supported": true, "stability_class": "extension" }
+  ],
+  "config_model": {
+    "groups": [
+      { "id": "identity", "mutability": "read_only" },
+      { "id": "classification", "mutability": "read_only" },
+      { "id": "hardware", "mutability": "read_only" },
+      { "id": "topology", "mutability": "read_only" },
+      { "id": "operational", "mutability": "read_write" },
+      { "id": "commissioning", "mutability": "stage_bound_write" },
+      { "id": "platform", "mutability": "read_only" }
+    ]
+  },
+  "commissioning_model": {
+    "states": ["not_started", "in_progress", "ready_to_commit", "committed", "blocked"],
+    "stages": [
+      { "id": "identity_review", "required": true },
+      { "id": "operational_setup", "required": true },
+      { "id": "commissioning_setup", "required": true },
+      { "id": "verification", "required": true }
+    ]
+  },
+  "state_model": {
+    "states": ["safe", "armed", "test_mode", "failsafe", "signal_loss"],
+    "modifiers": ["stop_latched", "commissioning_active"]
+  },
+  "commands": [
+    { "token": "system.get_profile", "stability_class": "required" },
+    { "token": "config.get_groups", "stability_class": "required" },
+    { "token": "config.update_groups", "stability_class": "required" },
+    { "token": "commissioning.get_status", "stability_class": "required" },
+    { "token": "commissioning.apply_stage", "stability_class": "required" },
+    { "token": "commissioning.commit", "stability_class": "required" },
+    { "token": "test.list_catalog", "stability_class": "required" },
+    { "token": "test.run_component", "stability_class": "optional" },
+    { "token": "safety.stop_all", "stability_class": "required" },
+    { "token": "state.enter_test_mode", "stability_class": "extension" },
+    { "token": "state.exit_test_mode", "stability_class": "extension" }
+  ],
+  "command_completion": {
+    "default_timeout_ms": 15000,
+    "supports_progress_updates": true
+  },
+  "exposure": {
+    "authority": {
+      "contract_source": "nexus",
+      "firmware_role": "declaration_only"
+    }
+  }
+}

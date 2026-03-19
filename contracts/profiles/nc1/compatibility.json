@@ -1,0 +1,96 @@
+{
+  "id": "nc1-compatibility",
+  "display_name": "NC1 Compatibility and Compliance",
+  "version": "0.2.0",
+  "status": "provisional",
+  "contract_schema_version": "1.0.0",
+  "description": "Compatibility requirements and compliance targets for NC1 implementations and consumers.",
+  "minimum_dependencies": {
+    "nexbus": {
+      "minimum_version": "1.0.0",
+      "notes": "Transport compatibility is required but wire semantics remain defined in NexBus repositories."
+    },
+    "nexcore": {
+      "minimum_version": "1.0.0",
+      "notes": "NexCore implementations must publish NC1 capability/command declarations."
+    }
+  },
+  "profile_version_rules": {
+    "consumer_rule": "Consumers claiming NC1 support must handle all required commands/capabilities for declared profile major version.",
+    "implementation_rule": "Implementations must reject unsupported major versions explicitly and declare supported version range.",
+    "forward_compatibility": "Consumers should ignore unknown extension/experimental fields unless marked required.",
+    "backward_compatibility": "Required fields in current major version must remain present across minor updates."
+  },
+  "implementation_declaration_requirements": [
+    "Publish profile id, profile version, and contract_schema_version.",
+    "Publish support declaration for every required and optional capability.",
+    "Expose required command tokens with documented error behavior.",
+    "Expose compatibility metadata in discovery/platform group."
+  ],
+  "required_capabilities": [
+    "discovery.profile_descriptor",
+    "configuration.group_read_write",
+    "commissioning.guided_workflow",
+    "safety.stop_all",
+    "testing.catalog_discovery"
+  ],
+  "required_command_behaviors": [
+    {
+      "token": "system.get_profile",
+      "expectation": "Returns authoritative profile descriptor fields."
+    },
+    {
+      "token": "config.get_groups",
+      "expectation": "Returns mutability metadata per group."
+    },
+    {
+      "token": "config.update_groups",
+      "expectation": "Returns field-scoped validation results."
+    },
+    {
+      "token": "commissioning.get_status",
+      "expectation": "Returns stage and blocker model for workflow rendering."
+    },
+    {
+      "token": "commissioning.commit",
+      "expectation": "Returns applied revision and refresh requirement on success."
+    },
+    {
+      "token": "test.list_catalog",
+      "expectation": "Returns test metadata including hazard and gating fields."
+    },
+    {
+      "token": "safety.stop_all",
+      "expectation": "Forces immediate stop intent and emits resulting state change."
+    }
+  ],
+  "consumer_expectations": {
+    "nexsight": "Use capability declarations and catalog metadata rather than hardcoded assumptions.",
+    "automation": "Feature-detect optional/extension/experimental surfaces before use.",
+    "compliance": "Evaluate implementations against required surfaces and declared stability classes."
+  },
+  "deprecation_and_migration": {
+    "deprecation_notice_requirement": "At least one minor release notice before removing optional or extension surfaces.",
+    "required_surface_removal": "Requires major profile version increment.",
+    "migration_hooks": [
+      "replacement_token",
+      "sunset_version",
+      "migration_notes"
+    ]
+  },
+  "compliance_targets": {
+    "baseline_target": "NC1 Baseline",
+    "baseline_requires": [
+      "all required capabilities",
+      "all required command behaviors",
+      "commissioning workflow states and stages",
+      "state/safety semantic mapping"
+    ],
+    "extended_target": "NC1 Extended",
+    "extended_includes": [
+      "optional and extension capabilities as declared",
+      "test execution flows beyond catalog discovery"
+    ],
+    "notes": "Experimental surfaces are excluded from pass/fail baseline scoring."
+  }
+}
