@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/test-catalog.schema.json",
+  "title": "Test Catalog Entry",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "level": { "type": "string" },
+    "description": { "type": "string" }
+  },
+  "required": ["id", "title"]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/contracts/profiles/nc1/config.schema.json",
+  "title": "NC1 Configuration Schema",
+  "description": "Placeholder schema for NC1 configuration groups and fields.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "schema_version": { "type": "string" },
+    "version": { "type": "string" },
+    "status": { "type": "string" },
+    "groups": {
+      "type": "array",
+      "items": { "$ref": "../../../schemas/config-group.schema.json" }
+    },
+    "todo": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["id", "schema_version", "version", "status", "groups"]
+}

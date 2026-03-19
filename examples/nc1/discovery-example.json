@@ -1,0 +1,13 @@
+{
+  "profile_id": "nc1",
+  "profile_version": "0.1.0",
+  "device": {
+    "id": "example-device-001",
+    "model": "TODO_MODEL"
+  },
+  "capabilities": [
+    "motion.basic",
+    "safety.estop"
+  ],
+  "status": "illustrative-placeholder"
+}

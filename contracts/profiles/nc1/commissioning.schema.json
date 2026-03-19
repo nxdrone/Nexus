@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/contracts/profiles/nc1/commissioning.schema.json",
+  "title": "NC1 Commissioning Schema",
+  "description": "Placeholder schema for NC1 commissioning workflow definitions.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "schema_version": { "type": "string" },
+    "version": { "type": "string" },
+    "status": { "type": "string" },
+    "workflow": {
+      "type": "array",
+      "items": { "$ref": "../../../schemas/commissioning.schema.json" }
+    },
+    "todo": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["id", "schema_version", "version", "status", "workflow"]
+}

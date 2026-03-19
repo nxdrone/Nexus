@@ -1,0 +1,15 @@
+{
+  "profile_id": "nc1",
+  "command": {
+    "id": "motion.move_to",
+    "arguments": {
+      "x": 1.0,
+      "y": 2.0,
+      "z": 0.5
+    }
+  },
+  "expected_response": {
+    "status": "accepted"
+  },
+  "status": "illustrative-placeholder"
+}
