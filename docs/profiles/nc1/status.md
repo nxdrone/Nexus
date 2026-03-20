@@ -26,3 +26,8 @@ The following are stable enough for initial implementation/consumption alignment
 1. Ratify command-level payload schemas and standardized error codes.
 2. Ratify commissioning reset token and behavior details.
 3. Expand compliance automation to enforce baseline NC1 target criteria.
+
+## Focused audit reference
+
+- See [NC1 Contract-Gap and Testability Audit](contract-gap-testability-audit.md) for prioritized contract/test/compliance actions to improve NexSight Tests page usefulness.
+
