@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/contracts/schemas/state-presentation.schema.json",
+  "title": "State Presentation",
+  "description": "Schema for canonical client-visible state color and pattern semantics.",
+  "type": "object",
+  "required": [
+    "state_id",
+    "display_name",
+    "meaning",
+    "color_name",
+    "color_token",
+    "default_hex",
+    "pattern_intent",
+    "notes"
+  ],
+  "properties": {
+    "state_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_+]+$"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "meaning": {
+      "type": "string",
+      "minLength": 1
+    },
+    "color_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "color_token": {
+      "type": "string",
+      "pattern": "^state\\.[a-z0-9_]+$"
+    },
+    "default_hex": {
+      "type": "string",
+      "pattern": "^#[A-Fa-f0-9]{6}$"
+    },
+    "pattern_intent": {
+      "type": "string",
+      "enum": [
+        "solid",
+        "blink",
+        "twinkle",
+        "alternate"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

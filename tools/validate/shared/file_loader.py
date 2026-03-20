@@ -20,6 +20,7 @@ def discover_nc1_contract_files() -> Dict[str, Path]:
         "config": NC1_CONTRACT_DIR / "config.schema.json",
         "commissioning": NC1_CONTRACT_DIR / "commissioning.schema.json",
         "state_machine": NC1_CONTRACT_DIR / "state-machine.json",
+        "state_presentation": NC1_CONTRACT_DIR / "state-presentation.json",
         "test": NC1_CONTRACT_DIR / "test.schema.json",
         "compatibility": NC1_CONTRACT_DIR / "compatibility.json",
     }

@@ -1,0 +1,96 @@
+{
+  "id": "nc1-state-presentation",
+  "display_name": "NC1 State Presentation Semantics",
+  "version": "0.2.0",
+  "status": "provisional",
+  "contract_schema_version": "1.0.0",
+  "description": "Canonical safety-critical color and pattern semantics for NC1 state communication across apps, tools, and firmware indicators.",
+  "source_state_machine_ref": "./state-machine.json",
+  "pattern_intents": [
+    "solid",
+    "blink",
+    "twinkle",
+    "alternate"
+  ],
+  "governance_rule": "These color and pattern intents are canonical for robot safety-state communication. Implementations may adapt timing and animation style but must preserve color meaning, pattern intent, and safety semantics.",
+  "state_presentations": [
+    {
+      "state_id": "safe",
+      "display_name": "SAFE",
+      "meaning": "Safe / non-actuating / idle but alive.",
+      "color_name": "blue",
+      "color_token": "state.safe",
+      "default_hex": "#0000FF",
+      "pattern_intent": "twinkle",
+      "notes": "Canonical SAFE indication for NC1 state-machine state 'safe'."
+    },
+    {
+      "state_id": "armed",
+      "display_name": "ARMED",
+      "meaning": "Live / hazardous / actuators may run at any time.",
+      "color_name": "red",
+      "color_token": "state.armed",
+      "default_hex": "#FF0000",
+      "pattern_intent": "solid",
+      "notes": "Canonical ARMED indication for NC1 state-machine state 'armed'."
+    },
+    {
+      "state_id": "test_mode",
+      "display_name": "TEST_MODE",
+      "meaning": "Controlled test context / operator-supervised hazard.",
+      "color_name": "yellow",
+      "color_token": "state.test_mode",
+      "default_hex": "#FFFF00",
+      "pattern_intent": "blink",
+      "notes": "Canonical TEST_MODE indication for NC1 state-machine state 'test_mode'."
+    },
+    {
+      "state_id": "failsafe",
+      "display_name": "FAILSAFE",
+      "meaning": "Safety fallback / fault-triggered condition.",
+      "color_name": "purple",
+      "color_token": "state.failsafe",
+      "default_hex": "#800080",
+      "pattern_intent": "solid",
+      "notes": "Canonical FAILSAFE indication for NC1 state-machine state 'failsafe'."
+    },
+    {
+      "state_id": "signal_loss",
+      "display_name": "SIGNAL_LOSS",
+      "meaning": "No control link / unknown or inactive control state.",
+      "color_name": "white",
+      "color_token": "state.signal_loss",
+      "default_hex": "#FFFFFF",
+      "pattern_intent": "blink",
+      "notes": "Canonical SIGNAL_LOSS indication for NC1 state-machine state 'signal_loss'."
+    }
+  ],
+  "combined_state_presentations": [
+    {
+      "state_id": "armed+test_mode",
+      "display_name": "ARMED + TEST_MODE",
+      "meaning": "Elevated hazard during controlled testing while system remains live.",
+      "primary_color_name": "red",
+      "primary_color_token": "state.armed",
+      "secondary_color_name": "yellow",
+      "secondary_color_token": "state.test_mode",
+      "default_hex": "#FF0000",
+      "pattern_intent": "blink",
+      "allowed_pattern_intents": [
+        "blink",
+        "alternate"
+      ],
+      "notes": "Red is primary. Alternating red/yellow is allowed when hardware supports it and improves visibility."
+    }
+  ],
+  "contrast_guidance": {
+    "signal_loss": {
+      "requirement": "Implementations must ensure white remains visible through contrast aids (outline, background, icon, or equivalent).",
+      "restriction": "Implementations must not remap SIGNAL_LOSS away from canonical white identity."
+    }
+  },
+  "extensibility": {
+    "future_modifier_support": true,
+    "future_profile_overrides": "Additional profiles may define their own presentation mappings while NC1 mapping remains authoritative for NC1 surfaces."
+  }
+}

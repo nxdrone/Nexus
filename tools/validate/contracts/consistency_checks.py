@@ -12,6 +12,14 @@ from reporting import Issue
 
 STABILITY_CLASSES = {"required", "optional", "extension", "experimental"}
 
+CANONICAL_STATE_PRESENTATION = {
+    "safe": {"color_name": "blue", "pattern_intent": "twinkle"},
+    "armed": {"color_name": "red", "pattern_intent": "solid"},
+    "test_mode": {"color_name": "yellow", "pattern_intent": "blink"},
+    "failsafe": {"color_name": "purple", "pattern_intent": "solid"},
+    "signal_loss": {"color_name": "white", "pattern_intent": "blink"},
+}
+
 
 def _collect_duplicates(values: Iterable[str]) -> set[str]:
     seen: set[str] = set()
@@ -123,6 +131,85 @@ def run_consistency_checks(bundle: dict[str, dict]) -> List[Issue]:
     ]
     for duplicate in sorted(_collect_duplicates([g for g in config_group_ids if isinstance(g, str)])):
         issues.append(Issue("error", "consistency", "config.schema.json", f"Duplicate config group id: {duplicate}"))
+
+    state_machine = bundle.get("state_machine", {})
+    state_presentation = bundle.get("state_presentation", {})
+
+    if state_presentation:
+        presentation_entries = state_presentation.get("state_presentations", [])
+        presentation_ids = [entry.get("state_id") for entry in presentation_entries if isinstance(entry, dict)]
+
+        for duplicate in sorted(_collect_duplicates([s for s in presentation_ids if isinstance(s, str)])):
+            issues.append(Issue("error", "consistency", "state-presentation.json", f"Duplicate state presentation state_id: {duplicate}"))
+
+        state_ids = [
+            state.get("id") for state in state_machine.get("states", []) if isinstance(state, dict)
+        ]
+
+        for state_id in state_ids:
+            if state_id not in presentation_ids:
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        f"Missing state presentation entry for state-machine state '{state_id}'.",
+                    )
+                )
+
+        presentation_map = {
+            entry.get("state_id"): entry
+            for entry in presentation_entries
+            if isinstance(entry, dict) and isinstance(entry.get("state_id"), str)
+        }
+
+        for state_id, expected in CANONICAL_STATE_PRESENTATION.items():
+            actual = presentation_map.get(state_id)
+            if not actual:
+                continue
+            if actual.get("color_name") != expected["color_name"]:
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        f"State '{state_id}' color_name must be '{expected['color_name']}' (found '{actual.get('color_name')}').",
+                    )
+                )
+            if actual.get("pattern_intent") != expected["pattern_intent"]:
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        f"State '{state_id}' pattern_intent must be '{expected['pattern_intent']}' (found '{actual.get('pattern_intent')}').",
+                    )
+                )
+
+        combined_entries = state_presentation.get("combined_state_presentations", [])
+        armed_test = next((entry for entry in combined_entries if isinstance(entry, dict) and entry.get("state_id") == "armed+test_mode"), None)
+        if not armed_test:
+            issues.append(Issue("error", "consistency", "state-presentation.json", "Missing combined state presentation for 'armed+test_mode'."))
+        else:
+            if armed_test.get("primary_color_name") != "red":
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        "Combined state 'armed+test_mode' primary_color_name must be 'red'.",
+                    )
+                )
+            allowed = armed_test.get("allowed_pattern_intents", [])
+            if not isinstance(allowed, list) or "blink" not in allowed or "alternate" not in allowed:
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        "Combined state 'armed+test_mode' must allow both 'blink' and 'alternate' pattern intents.",
+                    )
+                )
 
     commissioning = bundle.get("commissioning", {})
     for stage in commissioning.get("stages", []):

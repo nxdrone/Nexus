@@ -21,3 +21,8 @@ The NC1 package governs:
 ## Boundary reminder
 
 NC1 in Nexus defines contract intent and client-visible semantics; it does not define firmware internals, transport implementation specifics, or product-specific UX flows.
+
+## Safety state presentation contract
+
+NC1 includes a canonical state presentation contract in `contracts/profiles/nc1/state-presentation.json` that maps NC1 state-machine states to safety-critical color and pattern intent semantics. This mapping is authoritative for ecosystem consistency and must not be remapped by tools or firmware for safety states.
+
