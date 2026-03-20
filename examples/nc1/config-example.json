@@ -1,0 +1,13 @@
+{
+  "profile_id": "nc1",
+  "config": {
+    "motion": {
+      "max_speed": 1.25,
+      "accel_limit": 0.75
+    },
+    "safety": {
+      "estop_enabled": true
+    }
+  },
+  "status": "illustrative-placeholder"
+}
