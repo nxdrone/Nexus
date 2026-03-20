@@ -1,0 +1,170 @@
+{
+  "id": "nc1-capabilities",
+  "display_name": "NC1 Capabilities",
+  "version": "0.2.0",
+  "status": "provisional",
+  "contract_schema_version": "1.0.0",
+  "description": "Capability declarations for NC1 implementations and consumers.",
+  "support_declaration_model": {
+    "required_rule": "All required capabilities must be declared with supported=true.",
+    "optional_rule": "Optional capabilities must be explicitly declared as supported or unsupported.",
+    "absent_rule": "If a non-required capability is absent from declarations, consumers must treat it as unsupported.",
+    "client_interpretation": "Command presence alone does not imply full capability support; capability flags are authoritative."
+  },
+  "categories": [
+    {
+      "id": "discovery",
+      "display_name": "Discovery",
+      "description": "Identity, inventory, and profile self-description surfaces."
+    },
+    {
+      "id": "configuration",
+      "display_name": "Configuration",
+      "description": "Read/write operational configuration contract groups."
+    },
+    {
+      "id": "commissioning",
+      "display_name": "Commissioning",
+      "description": "Schema-driven setup and activation workflow surfaces."
+    },
+    {
+      "id": "state_control",
+      "display_name": "State Control",
+      "description": "Client-visible state and commandable mode transitions."
+    },
+    {
+      "id": "safety",
+      "display_name": "Safety",
+      "description": "Failsafe, stop, and recovery controls/indicators."
+    },
+    {
+      "id": "testing",
+      "display_name": "Testing",
+      "description": "Test catalog discovery and test execution controls."
+    },
+    {
+      "id": "telemetry",
+      "display_name": "Telemetry",
+      "description": "Published runtime measurements and health signals."
+    },
+    {
+      "id": "logging",
+      "display_name": "Logging",
+      "description": "Operational and diagnostic log interfaces."
+    },
+    {
+      "id": "identity",
+      "display_name": "Identity",
+      "description": "Platform and build identity reporting surfaces."
+    },
+    {
+      "id": "transport_service",
+      "display_name": "Transport and Service",
+      "description": "Service endpoints and transport service declarations."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "discovery.profile_descriptor",
+      "display_name": "Profile Descriptor",
+      "category": "discovery",
+      "stability_class": "required",
+      "supported": true,
+      "description": "Implementation publishes NC1 profile id/version and contract references.",
+      "related_commands": [
+        "system.get_profile"
+      ]
+    },
+    {
+      "id": "configuration.group_read_write",
+      "display_name": "Config Group Read/Write",
+      "category": "configuration",
+      "stability_class": "required",
+      "supported": true,
+      "description": "Implementation supports read and update of declared writable operational groups.",
+      "related_commands": [
+        "config.get_groups",
+        "config.update_groups"
+      ]
+    },
+    {
+      "id": "commissioning.guided_workflow",
+      "display_name": "Guided Commissioning Workflow",
+      "category": "commissioning",
+      "stability_class": "required",
+      "supported": true,
+      "description": "Implementation exposes commissioning state and stage progression with validation.",
+      "related_commands": [
+        "commissioning.get_status",
+        "commissioning.apply_stage",
+        "commissioning.commit"
+      ]
+    },
+    {
+      "id": "safety.stop_all",
+      "display_name": "Stop All",
+      "category": "safety",
+      "stability_class": "required",
+      "supported": true,
+      "description": "Implementation accepts a global stop request and reports resulting safety state.",
+      "related_commands": [
+        "safety.stop_all"
+      ]
+    },
+    {
+      "id": "testing.catalog_discovery",
+      "display_name": "Test Catalog Discovery",
+      "category": "testing",
+      "stability_class": "required",
+      "supported": true,
+      "description": "Implementation provides a machine-readable test inventory for client rendering.",
+      "related_commands": [
+        "test.list_catalog"
+      ]
+    },
+    {
+      "id": "state_control.test_mode",
+      "display_name": "Test Mode Control",
+      "category": "state_control",
+      "stability_class": "optional",
+      "supported": false,
+      "description": "Implementation supports controlled entry/exit for explicit test mode operations.",
+      "related_commands": [
+        "state.enter_test_mode",
+        "state.exit_test_mode"
+      ]
+    },
+    {
+      "id": "telemetry.stream_runtime",
+      "display_name": "Runtime Telemetry Stream",
+      "category": "telemetry",
+      "stability_class": "extension",
+      "supported": false,
+      "description": "Implementation exposes continuous runtime telemetry stream endpoint.",
+      "related_commands": []
+    },
+    {
+      "id": "logging.remote_log_stream",
+      "display_name": "Remote Log Stream",
+      "category": "logging",
+      "stability_class": "experimental",
+      "supported": false,
+      "description": "Implementation may expose remote log streaming for diagnostics.",
+      "related_commands": []
+    }
+  ],
+  "relationships": [
+    {
+      "type": "requires",
+      "source": "commissioning.guided_workflow",
+      "target": "configuration.group_read_write",
+      "reason": "Commissioning stages edit declared configuration groups."
+    },
+    {
+      "type": "gates",
+      "source": "safety.stop_all",
+      "target": "state_control.test_mode",
+      "reason": "Test mode transitions can be blocked by active safety stop conditions."
+    }
+  ]
+}

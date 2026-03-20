@@ -1,0 +1,65 @@
+{
+  "id": "nc1",
+  "display_name": "NC1",
+  "version": "0.2.0",
+  "status": "provisional",
+  "description": "Canonical client-facing contract profile for the NC1 Nexus robotics ecosystem.",
+  "contract_schema_version": "1.0.0",
+  "ecosystem": {
+    "id": "nexus",
+    "display_name": "Nexus"
+  },
+  "architecture_id": "nexus-ecosystem-contract-layer",
+  "protocol_dependencies": [
+    {
+      "id": "nexbus",
+      "display_name": "NexBus",
+      "role": "transport",
+      "minimum_compatibility": "declared-in-compatibility.json"
+    }
+  ],
+  "consumer_types": [
+    "client_ui",
+    "automation_tooling",
+    "compliance_harness"
+  ],
+  "implementation_types": [
+    "firmware_controller",
+    "device_adapter",
+    "simulator"
+  ],
+  "authoritative_for": [
+    "profile identity and package boundaries",
+    "client-visible capability declarations",
+    "command catalog tokens and stability class",
+    "configuration and commissioning contract shape",
+    "state/safety semantic model",
+    "service and test discovery model",
+    "compatibility and compliance requirements"
+  ],
+  "not_authoritative_for": [
+    "NexBus transport wire-level implementation details",
+    "NexCore firmware internals and scheduling",
+    "NexSight product UX design choices",
+    "platform-specific optimization behavior"
+  ],
+  "stability_policy": {
+    "classes": [
+      "required",
+      "optional",
+      "extension",
+      "experimental"
+    ],
+    "client_rule": "Consumers may hard-depend only on required items unless out-of-band agreements exist.",
+    "implementation_rule": "Implementations must explicitly declare unsupported optional/extension/experimental surfaces."
+  },
+  "artifact_index": {
+    "capabilities": "capabilities.json",
+    "commands": "commands.json",
+    "config_schema": "config.schema.json",
+    "commissioning_schema": "commissioning.schema.json",
+    "state_machine": "state-machine.json",
+    "test_schema": "test.schema.json",
+    "compatibility": "compatibility.json"
+  }
+}

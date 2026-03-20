@@ -1,0 +1,56 @@
+{
+  "id": "sample-nc1-impl-manifest",
+  "schema_version": "1.0.0",
+  "manifest_version": "1.0.0",
+  "declared_profile_id": "nc1",
+  "declared_profile_version": "0.2.0",
+  "declared_contract_version": "0.2.0",
+  "implementation_manifest_version": "sample-1",
+  "capabilities": [
+    { "id": "discovery.profile_descriptor", "supported": true, "stability_class": "required" },
+    { "id": "configuration.group_read_write", "supported": true, "stability_class": "required" },
+    { "id": "commissioning.guided_workflow", "supported": true, "stability_class": "required" },
+    { "id": "safety.stop_all", "supported": true, "stability_class": "required" },
+    { "id": "testing.catalog_discovery", "supported": false, "stability_class": "required" },
+    { "id": "vendor.custom_capability", "supported": true, "stability_class": "extension" }
+  ],
+  "config_model": {
+    "groups": [
+      { "id": "identity", "mutability": "read_only" },
+      { "id": "classification", "mutability": "read_only" },
+      { "id": "hardware", "mutability": "read_only" },
+      { "id": "operational", "mutability": "read_write" },
+      { "id": "vendor_group", "mutability": "read_only" }
+    ]
+  },
+  "commissioning_model": {
+    "states": ["not_started", "in_progress", "ready_to_commit", "committed", "blocked"],
+    "stages": [
+      { "id": "identity_review", "required": true },
+      { "id": "operational_setup", "required": true },
+      { "id": "commissioning_setup", "required": true },
+      { "id": "verification", "required": true }
+    ]
+  },
+  "state_model": {
+    "states": ["safe", "armed", "failsafe", "signal_loss"]
+  },
+  "commands": [
+    { "token": "system.get_profile", "stability_class": "required" },
+    { "token": "config.get_groups", "stability_class": "required" },
+    { "token": "config.update_groups", "stability_class": "required" },
+    { "token": "commissioning.get_status", "stability_class": "required" },
+    { "token": "commissioning.commit", "stability_class": "required" },
+    { "token": "test.list_catalog", "stability_class": "optional" },
+    { "token": "vendor.custom_command", "stability_class": "extension" }
+  ],
+  "command_completion": {
+    "default_timeout_ms": 10000
+  },
+  "exposure": {
+    "authority": {
+      "contract_source": "nexus",
+      "firmware_role": "declaration_only"
+    }
+  }
+}

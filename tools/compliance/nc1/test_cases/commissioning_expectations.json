@@ -1,0 +1,21 @@
+{
+  "id": "nc1-commissioning-expectations",
+  "display_name": "NC1 Commissioning Expectations",
+  "version": "0.1.0",
+  "status": "provisional",
+  "profile_id": "nc1",
+  "required_stages": [
+    "identity_review",
+    "operational_setup",
+    "commissioning_setup",
+    "verification"
+  ],
+  "required_behaviors": [
+    "stage-scoped validation with machine-readable blockers",
+    "commit allowed only from ready_to_commit state",
+    "authoritative refresh required after successful commit"
+  ],
+  "notes": [
+    "Reset token behavior remains provisional and implementation-specific until ratified."
+  ]
+}

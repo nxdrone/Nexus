@@ -1,0 +1,45 @@
+{
+  "id": "nc1-compliance-manifest",
+  "display_name": "NC1 Compliance Manifest",
+  "version": "0.1.0",
+  "status": "provisional",
+  "profile_id": "nc1",
+  "profile_version": "0.2.0",
+  "stability_classes": [
+    "required",
+    "optional",
+    "extension",
+    "experimental"
+  ],
+  "targets": [
+    {
+      "id": "nc1-baseline",
+      "display_name": "NC1 Baseline",
+      "requires": [
+        "required_capabilities",
+        "required_commands",
+        "state_model_expectations",
+        "commissioning_expectations"
+      ]
+    },
+    {
+      "id": "nc1-extended",
+      "display_name": "NC1 Extended",
+      "includes": [
+        "optional_and_extension_surfaces"
+      ]
+    }
+  ],
+  "sources": {
+    "profile": "../../../contracts/profiles/nc1/profile.json",
+    "capabilities": "../../../contracts/profiles/nc1/capabilities.json",
+    "commands": "../../../contracts/profiles/nc1/commands.json",
+    "state_machine": "../../../contracts/profiles/nc1/state-machine.json",
+    "commissioning": "../../../contracts/profiles/nc1/commissioning.schema.json",
+    "compatibility": "../../../contracts/profiles/nc1/compatibility.json"
+  },
+  "notes": [
+    "This manifest defines compliance expectations derived from authoritative NC1 contracts.",
+    "Experimental surfaces are excluded from baseline pass/fail scoring unless explicitly enabled."
+  ]
+}
