@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/state-machine.schema.json",
+  "title": "State Machine",
+  "type": "object",
+  "properties": {
+    "states": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "event": { "type": "string" }
+        },
+        "required": ["from", "to", "event"]
+      }
+    }
+  },
+  "required": ["states", "transitions"]
+}

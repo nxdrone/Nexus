@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/commissioning.schema.json",
+  "title": "Commissioning Step",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "required": { "type": "boolean" }
+  },
+  "required": ["id", "name"]
+}

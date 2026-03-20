@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/schemas/command.schema.json",
+  "title": "Command",
+  "type": "object",
+  "properties": {
+    "token": { "type": "string" },
+    "display_name": { "type": "string" },
+    "stability_class": {
+      "type": "string",
+      "enum": ["required", "optional", "extension", "experimental"]
+    },
+    "category": { "type": "string" },
+    "purpose": { "type": "string" },
+    "preconditions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "response_contract": { "type": "string" },
+    "completion_model": { "type": "string" },
+    "follow_up_messages": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "error_behavior": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "required": [
+    "token",
+    "display_name",
+    "stability_class",
+    "category",
+    "purpose",
+    "response_contract",
+    "completion_model"
+  ],
+  "$defs": {
+    "system_get_profile_request": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "config_get_groups_request": {
+      "type": "object",
+      "properties": {
+        "group_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "config_update_groups_request": {
+      "type": "object",
+      "properties": {
+        "updates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "group_id": { "type": "string" },
+              "fields": { "type": "object" }
+            },
+            "required": ["group_id", "fields"]
+          }
+        }
+      },
+      "required": ["updates"],
+      "additionalProperties": false
+    },
+    "commissioning_get_status_request": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "commissioning_apply_stage_request": {
+      "type": "object",
+      "properties": {
+        "target_stage": { "type": "string" }
+      },
+      "required": ["target_stage"],
+      "additionalProperties": false
+    },
+    "commissioning_commit_request": {
+      "type": "object",
+      "properties": {
+        "expected_revision": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "test_list_catalog_request": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "test_run_component_request": {
+      "type": "object",
+      "properties": {
+        "test_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "parameters": { "type": "object" }
+      },
+      "required": ["test_id"],
+      "additionalProperties": false
+    },
+    "safety_stop_all_request": {
+      "type": "object",
+      "properties": {
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "state_enter_test_mode_request": {
+      "type": "object",
+      "properties": {
+        "session_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "state_exit_test_mode_request": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "system_stream_logs_request": {
+      "type": "object",
+      "properties": {
+        "level": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

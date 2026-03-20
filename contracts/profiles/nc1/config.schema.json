@@ -1,0 +1,129 @@
+{
+  "id": "nc1-config-model",
+  "display_name": "NC1 Configuration and Discovery Model",
+  "version": "0.2.0",
+  "status": "provisional",
+  "contract_schema_version": "1.0.0",
+  "description": "First-pass contract structure for discovery, writable config, commissioning data, and runtime exclusions.",
+  "groups": [
+    {
+      "id": "identity",
+      "display_name": "Identity",
+      "purpose": "Expose immutable identity descriptors for discovery and auditing.",
+      "mutability": "read_only",
+      "requirement": "required",
+      "example_fields": {
+        "device_id": "nc1-device-001",
+        "serial_number": "SN-EXAMPLE",
+        "firmware_track": "stable"
+      },
+      "client_notes": "Treat as discovery metadata; do not submit writes."
+    },
+    {
+      "id": "classification",
+      "display_name": "Classification",
+      "purpose": "Describe implementation class, role, and deployment context.",
+      "mutability": "read_only",
+      "requirement": "required",
+      "example_fields": {
+        "implementation_type": "firmware_controller",
+        "platform_class": "ground_robotics"
+      },
+      "client_notes": "Useful for filtering capabilities and supported workflows."
+    },
+    {
+      "id": "hardware",
+      "display_name": "Hardware",
+      "purpose": "Report board/sensor/actuator inventory relevant to profile behavior.",
+      "mutability": "read_only",
+      "requirement": "required",
+      "example_fields": {
+        "controller": "NexCore-X",
+        "io_modules": [
+          "dio-16",
+          "adc-8"
+        ]
+      },
+      "client_notes": "Inventory may explain optional capability availability."
+    },
+    {
+      "id": "topology",
+      "display_name": "Topology",
+      "purpose": "Describe connected component graph exposed by implementation.",
+      "mutability": "read_only",
+      "requirement": "optional",
+      "example_fields": {
+        "nodes": [
+          "controller",
+          "estop"
+        ],
+        "links": [
+          {
+            "from": "controller",
+            "to": "estop"
+          }
+        ]
+      },
+      "client_notes": "May be omitted on minimal implementations."
+    },
+    {
+      "id": "operational",
+      "display_name": "Operational Configuration",
+      "purpose": "Writable runtime-affecting configuration values.",
+      "mutability": "read_write",
+      "requirement": "required",
+      "example_fields": {
+        "motion": {
+          "max_speed": 1.2,
+          "accel_limit": 0.7
+        },
+        "safety": {
+          "estop_latch_mode": "manual_reset"
+        }
+      },
+      "client_notes": "Writes are validated and may be staged depending on commissioning state."
+    },
+    {
+      "id": "commissioning",
+      "display_name": "Commissioning Data",
+      "purpose": "Writable setup values required for activation readiness.",
+      "mutability": "stage_bound_write",
+      "requirement": "required",
+      "example_fields": {
+        "site": {
+          "timezone": "UTC",
+          "location_code": "TEST_RANGE_1"
+        },
+        "calibration": {
+          "imu_profile": "default"
+        }
+      },
+      "client_notes": "Fields may be editable only in specific commissioning stages."
+    },
+    {
+      "id": "platform",
+      "display_name": "Platform Info",
+      "purpose": "Expose software platform and contract support descriptors.",
+      "mutability": "read_only",
+      "requirement": "required",
+      "example_fields": {
+        "profile_id": "nc1",
+        "profile_version": "0.2.0",
+        "supported_contract_schema_version": "1.0.0"
+      },
+      "client_notes": "Consumers should use this for compatibility checks."
+    }
+  ],
+  "runtime_excluded": {
+    "display_name": "Runtime State (Excluded from Config)",
+    "purpose": "Clarify runtime values that are observable but not writable configuration.",
+    "includes": [
+      "current_state",
+      "failsafe_status",
+      "signal_quality",
+      "active_test_session",
+      "live_telemetry"
+    ],
+    "client_notes": "Runtime values should be read from state and telemetry surfaces, not config update commands."
+  }
+}
