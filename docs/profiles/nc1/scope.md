@@ -7,7 +7,7 @@
 - command catalog and command behavior contract expectations
 - structured config/discovery and commissioning workflow definitions
 - client-visible state and safety semantic model
-- canonical safety state presentation semantics (color + pattern intent)
+- canonical safety state presentation semantics (color + pattern intent), including precedence and FAILSAFE override behavior
 - service/test discovery and compatibility/compliance declarations
 
 ## Out of scope for the NC1 contract

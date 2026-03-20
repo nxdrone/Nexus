@@ -163,6 +163,33 @@ def run_consistency_checks(bundle: dict[str, dict]) -> List[Issue]:
             if isinstance(entry, dict) and isinstance(entry.get("state_id"), str)
         }
 
+        seen_priorities = {}
+        for entry in presentation_entries:
+            if not isinstance(entry, dict):
+                continue
+            state_id = entry.get("state_id")
+            priority = entry.get("priority")
+            if isinstance(priority, int):
+                if priority in seen_priorities:
+                    issues.append(
+                        Issue(
+                            "error",
+                            "consistency",
+                            "state-presentation.json",
+                            f"Priority {priority} is reused by '{seen_priorities[priority]}' and '{state_id}'.",
+                        )
+                    )
+                else:
+                    seen_priorities[priority] = state_id
+
+        expected_safety_levels = {
+            "safe": "safe",
+            "test_mode": "caution",
+            "armed": "hazard",
+            "failsafe": "fault",
+            "signal_loss": "unknown",
+        }
+
         for state_id, expected in CANONICAL_STATE_PRESENTATION.items():
             actual = presentation_map.get(state_id)
             if not actual:
@@ -185,6 +212,38 @@ def run_consistency_checks(bundle: dict[str, dict]) -> List[Issue]:
                         f"State '{state_id}' pattern_intent must be '{expected['pattern_intent']}' (found '{actual.get('pattern_intent')}').",
                     )
                 )
+            expected_level = expected_safety_levels.get(state_id)
+            if expected_level and actual.get("safety_level") != expected_level:
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        f"State '{state_id}' safety_level must be '{expected_level}' (found '{actual.get('safety_level')}').",
+                    )
+                )
+
+        failsafe = presentation_map.get("failsafe")
+        if not failsafe:
+            issues.append(Issue("error", "consistency", "state-presentation.json", "Missing FAILSAFE state presentation."))
+        else:
+            failsafe_priority = failsafe.get("priority")
+            if not isinstance(failsafe_priority, int):
+                issues.append(Issue("error", "consistency", "state-presentation.json", "FAILSAFE must declare integer priority."))
+            else:
+                for entry in presentation_entries:
+                    if not isinstance(entry, dict) or entry.get("state_id") == "failsafe":
+                        continue
+                    priority = entry.get("priority")
+                    if isinstance(priority, int) and priority >= failsafe_priority:
+                        issues.append(
+                            Issue(
+                                "error",
+                                "consistency",
+                                "state-presentation.json",
+                                f"FAILSAFE priority ({failsafe_priority}) must be higher than '{entry.get('state_id')}' ({priority}).",
+                            )
+                        )
 
         combined_entries = state_presentation.get("combined_state_presentations", [])
         armed_test = next((entry for entry in combined_entries if isinstance(entry, dict) and entry.get("state_id") == "armed+test_mode"), None)
@@ -208,6 +267,95 @@ def run_consistency_checks(bundle: dict[str, dict]) -> List[Issue]:
                         "consistency",
                         "state-presentation.json",
                         "Combined state 'armed+test_mode' must allow both 'blink' and 'alternate' pattern intents.",
+                    )
+                )
+            members = armed_test.get("member_states", [])
+            if members != ["armed", "test_mode"]:
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        "Combined state 'armed+test_mode' member_states must be ['armed', 'test_mode'].",
+                    )
+                )
+            model = armed_test.get("composition_model", {})
+            if not isinstance(model, dict):
+                issues.append(Issue("error", "consistency", "state-presentation.json", "Combined state composition_model must be an object."))
+            else:
+                expected_model = {
+                    "primary_state_id": "armed",
+                    "pattern_modifier_state_id": "test_mode",
+                    "primary_color_source": "armed",
+                    "secondary_signal_source": "test_mode",
+                }
+                for key, value in expected_model.items():
+                    if model.get(key) != value:
+                        issues.append(
+                            Issue(
+                                "error",
+                                "consistency",
+                                "state-presentation.json",
+                                f"Combined state 'armed+test_mode' {key} must be '{value}'.",
+                            )
+                        )
+
+        override_rules = state_presentation.get("override_rules", [])
+        failsafe_override = next(
+            (
+                rule
+                for rule in override_rules
+                if isinstance(rule, dict) and rule.get("id") == "failsafe_visual_override"
+            ),
+            None,
+        )
+        if not failsafe_override:
+            issues.append(
+                Issue(
+                    "error",
+                    "consistency",
+                    "state-presentation.json",
+                    "Missing required override rule 'failsafe_visual_override'.",
+                )
+            )
+        else:
+            if failsafe_override.get("state_id") != "failsafe":
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        "failsafe_visual_override must reference state_id 'failsafe'.",
+                    )
+                )
+            dominates = failsafe_override.get("dominates_states", [])
+            expected_dominates = {"safe", "armed", "test_mode", "signal_loss", "armed+test_mode"}
+            if set(dominates) != expected_dominates:
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        "failsafe_visual_override dominates_states must exactly cover safe, armed, test_mode, signal_loss, and armed+test_mode.",
+                    )
+                )
+            if failsafe_override.get("safety_level") != "fault":
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        "failsafe_visual_override safety_level must be 'fault'.",
+                    )
+                )
+
+            if isinstance(failsafe.get("priority"), int) and failsafe_override.get("priority") != failsafe.get("priority"):
+                issues.append(
+                    Issue(
+                        "error",
+                        "consistency",
+                        "state-presentation.json",
+                        "failsafe_visual_override priority must match FAILSAFE state priority.",
                     )
                 )
 

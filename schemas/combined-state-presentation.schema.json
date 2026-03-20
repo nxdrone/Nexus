@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus/contracts/schemas/combined-state-presentation.schema.json",
+  "title": "Combined State Presentation",
+  "description": "Schema for combined-state presentation semantics.",
+  "type": "object",
+  "required": [
+    "state_id",
+    "display_name",
+    "meaning",
+    "priority",
+    "safety_level",
+    "member_states",
+    "composition_model",
+    "primary_color_name",
+    "primary_color_token",
+    "secondary_color_name",
+    "secondary_color_token",
+    "default_hex",
+    "pattern_intent",
+    "allowed_pattern_intents",
+    "notes"
+  ],
+  "properties": {
+    "state_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_+]+$"
+    },
+    "display_name": { "type": "string", "minLength": 1 },
+    "meaning": { "type": "string", "minLength": 1 },
+    "priority": { "type": "integer", "minimum": 0 },
+    "safety_level": {
+      "type": "string",
+      "enum": ["safe", "caution", "hazard", "fault", "unknown"]
+    },
+    "member_states": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+      "minItems": 2,
+      "uniqueItems": true
+    },
+    "composition_model": {
+      "type": "object",
+      "required": [
+        "primary_state_id",
+        "pattern_modifier_state_id",
+        "primary_color_source",
+        "secondary_signal_source"
+      ],
+      "properties": {
+        "primary_state_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "pattern_modifier_state_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "primary_color_source": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "secondary_signal_source": { "type": "string", "pattern": "^[a-z0-9_]+$" }
+      },
+      "additionalProperties": false
+    },
+    "primary_color_name": { "type": "string", "minLength": 1 },
+    "primary_color_token": { "type": "string", "pattern": "^state\\.[a-z0-9_]+$" },
+    "secondary_color_name": { "type": "string", "minLength": 1 },
+    "secondary_color_token": { "type": "string", "pattern": "^state\\.[a-z0-9_]+$" },
+    "default_hex": { "type": "string", "pattern": "^#[A-Fa-f0-9]{6}$" },
+    "pattern_intent": {
+      "type": "string",
+      "enum": ["solid", "blink", "twinkle", "alternate"]
+    },
+    "allowed_pattern_intents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["solid", "blink", "twinkle", "alternate"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

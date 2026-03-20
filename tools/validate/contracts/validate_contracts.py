@@ -66,6 +66,15 @@ def build_schema_tasks(bundle: dict[str, dict]) -> list[tuple[object, Path, str]
                 )
             )
 
+        for idx, entry in enumerate(bundle["state_presentation"].get("combined_state_presentations", [])):
+            tasks.append(
+                (
+                    entry,
+                    root / "schemas/combined-state-presentation.schema.json",
+                    f"contracts/profiles/nc1/state-presentation.json#/combined_state_presentations/{idx}",
+                )
+            )
+
     if "commissioning" in bundle:
         for idx, stage in enumerate(bundle["commissioning"].get("stages", [])):
             stage_instance = {

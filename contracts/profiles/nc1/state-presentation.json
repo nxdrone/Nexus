@@ -12,56 +12,104 @@
     "twinkle",
     "alternate"
   ],
+  "safety_levels": [
+    "safe",
+    "caution",
+    "hazard",
+    "fault",
+    "unknown"
+  ],
+  "resolution_model": {
+    "priority_rule": "higher_numeric_priority_wins",
+    "base_state_resolution": "Select the highest-priority active state presentation.",
+    "combined_state_resolution": "If all member states for a declared combined_state_presentations entry are active and no higher-priority override applies, use the declared combined state presentation.",
+    "fallback": "If no combined rule applies, resolve using base-state priority."
+  },
   "governance_rule": "These color and pattern intents are canonical for robot safety-state communication. Implementations may adapt timing and animation style but must preserve color meaning, pattern intent, and safety semantics.",
   "state_presentations": [
     {
       "state_id": "safe",
       "display_name": "SAFE",
       "meaning": "Safe / non-actuating / idle but alive.",
+      "priority": 10,
+      "safety_level": "safe",
       "color_name": "blue",
       "color_token": "state.safe",
       "default_hex": "#0000FF",
       "pattern_intent": "twinkle",
+      "accessibility": {
+        "requires_shape_or_icon": false,
+        "requires_contrast_aid": false,
+        "notes": "Twinkle animation should remain distinguishable from blink without relying only on color discrimination."
+      },
       "notes": "Canonical SAFE indication for NC1 state-machine state 'safe'."
     },
     {
       "state_id": "armed",
       "display_name": "ARMED",
       "meaning": "Live / hazardous / actuators may run at any time.",
+      "priority": 40,
+      "safety_level": "hazard",
       "color_name": "red",
       "color_token": "state.armed",
       "default_hex": "#FF0000",
       "pattern_intent": "solid",
+      "accessibility": {
+        "requires_shape_or_icon": true,
+        "requires_contrast_aid": false,
+        "notes": "Implementations should include a hazard icon/shape cue for users with limited color perception."
+      },
       "notes": "Canonical ARMED indication for NC1 state-machine state 'armed'."
     },
     {
       "state_id": "test_mode",
       "display_name": "TEST_MODE",
       "meaning": "Controlled test context / operator-supervised hazard.",
+      "priority": 30,
+      "safety_level": "caution",
       "color_name": "yellow",
       "color_token": "state.test_mode",
       "default_hex": "#FFFF00",
       "pattern_intent": "blink",
+      "accessibility": {
+        "requires_shape_or_icon": true,
+        "requires_contrast_aid": false,
+        "notes": "Blink + caution icon should be used when available to avoid ambiguity with non-hazard notifications."
+      },
       "notes": "Canonical TEST_MODE indication for NC1 state-machine state 'test_mode'."
     },
     {
       "state_id": "failsafe",
       "display_name": "FAILSAFE",
       "meaning": "Safety fallback / fault-triggered condition.",
+      "priority": 100,
+      "safety_level": "fault",
       "color_name": "purple",
       "color_token": "state.failsafe",
       "default_hex": "#800080",
       "pattern_intent": "solid",
+      "accessibility": {
+        "requires_shape_or_icon": true,
+        "requires_contrast_aid": false,
+        "notes": "Fault iconography is recommended so FAILSAFE remains obvious even under color-vision limits."
+      },
       "notes": "Canonical FAILSAFE indication for NC1 state-machine state 'failsafe'."
     },
     {
       "state_id": "signal_loss",
       "display_name": "SIGNAL_LOSS",
       "meaning": "No control link / unknown or inactive control state.",
+      "priority": 80,
+      "safety_level": "unknown",
       "color_name": "white",
       "color_token": "state.signal_loss",
       "default_hex": "#FFFFFF",
       "pattern_intent": "blink",
+      "accessibility": {
+        "requires_shape_or_icon": true,
+        "requires_contrast_aid": true,
+        "notes": "White must be paired with contrast aid (outline, background, icon, or equivalent) for visibility."
+      },
       "notes": "Canonical SIGNAL_LOSS indication for NC1 state-machine state 'signal_loss'."
     }
   ],
@@ -70,6 +118,18 @@
       "state_id": "armed+test_mode",
       "display_name": "ARMED + TEST_MODE",
       "meaning": "Elevated hazard during controlled testing while system remains live.",
+      "priority": 45,
+      "safety_level": "hazard",
+      "member_states": [
+        "armed",
+        "test_mode"
+      ],
+      "composition_model": {
+        "primary_state_id": "armed",
+        "pattern_modifier_state_id": "test_mode",
+        "primary_color_source": "armed",
+        "secondary_signal_source": "test_mode"
+      },
       "primary_color_name": "red",
       "primary_color_token": "state.armed",
       "secondary_color_name": "yellow",
@@ -81,6 +141,22 @@
         "alternate"
       ],
       "notes": "Red is primary. Alternating red/yellow is allowed when hardware supports it and improves visibility."
+    }
+  ],
+  "override_rules": [
+    {
+      "id": "failsafe_visual_override",
+      "state_id": "failsafe",
+      "priority": 100,
+      "safety_level": "fault",
+      "dominates_states": [
+        "safe",
+        "armed",
+        "test_mode",
+        "signal_loss",
+        "armed+test_mode"
+      ],
+      "rule": "When FAILSAFE is active, FAILSAFE presentation must override all other state and combined-state presentations unless a more severe explicitly ratified rule is added in a future contract version."
     }
   ],
   "contrast_guidance": {
